@@ -1,34 +1,55 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::fs;
 
+//Part 1
 pub fn day2() {
-    let contents = File::open("d2input.txt").expect("Failed to read file");
-
-    let reader = BufReader::new(contents);
-    println!("contents: {:?}", reader);
-
     let mut current: i32 = 0;
     let mut tuples = Vec::new();
-    for line in reader.lines() {
-        let line = line.expect("failed to read");
-        let mut chars = line.chars();
-        let c1 = chars.next().expect("Line too short");
-        let c2 = chars.next().expect("line too short");
+
+    let contents = fs::read_to_string("d2input.txt").expect("Failed to read file");
+    println!("Contents: {:?}", contents);
+    for line in contents.lines() {
+        let (c1, c2) = line.split_at(1);
         tuples.push((c1, c2));
     }
-    println!("This is Tuples: {:?}", tuples);
     for (c1, c2) in tuples {
         match (c1, c2) {
-            ('A', 'X') => current += (3 + 3),
-            ('A', 'Y') => current += (6 + 2),
-            ('A', 'Z') => current += 1,
-            ('B', 'X') => current += (3),
-            ('B', 'Y') => current += (3 + 2),
-            ('B', 'Z') => current += (6 + 1),
-            ('C', 'X') => current += (6 + 3),
-            ('C', 'Y') => current += (2),
-            ('C', 'Z') => current += (3 + 1),
-            _ => println!("no match found"),
+            ("A", " X") => current += (3 + 1),
+            ("A", " Y") => current += (6 + 2),
+            ("A", " Z") => current += 3,
+            ("B", " X") => current += (1),
+            ("B", " Y") => current += (3 + 2),
+            ("B", " Z") => current += (6 + 3),
+            ("C", " X") => current += (6 + 1),
+            ("C", " Y") => current += (2),
+            ("C", " Z") => current += (3 + 3),
+            _ => {}
+        }
+    }
+    println!("Answer: {}", current)
+}
+
+//Part 2
+pub fn day2p2() {
+    let mut current: i32 = 0;
+    let mut tuples = Vec::new();
+
+    let contents = fs::read_to_string("d2input.txt").expect("Failed to read file");
+    for line in contents.lines() {
+        let (c1, c2) = line.split_at(1);
+        tuples.push((c1, c2));
+    }
+    for (c1, c2) in tuples {
+        match (c1, c2) {
+            ("A", " X") => current += (3),
+            ("A", " Y") => current += (1 + 3),
+            ("A", " Z") => current += (2 + 6),
+            ("B", " X") => current += (1),
+            ("B", " Y") => current += (3 + 2),
+            ("B", " Z") => current += (6 + 3),
+            ("C", " X") => current += (2),
+            ("C", " Y") => current += (3 + 3),
+            ("C", " Z") => current += (1 + 6),
+            _ => {}
         }
     }
     println!("Answer: {}", current)
