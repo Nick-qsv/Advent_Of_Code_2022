@@ -1,27 +1,35 @@
-use std::fs;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 pub fn day2() {
-    let contents = fs::read_to_string("input.txt").expect("Failed to read file");
+    let contents = File::open("d2input.txt").expect("Failed to read file");
+
+    let reader = BufReader::new(contents);
+    println!("contents: {:?}", reader);
 
     let mut current: i32 = 0;
-    let mut total_cals: Vec<i32> = vec![];
-    for line in contents.lines() {
-        if !line.is_empty() {
-            let x: i32 = line.parse().expect("not an integer");
-            current += x;
-        } else {
-            total_cals.push(current);
-            current = 0;
+    let mut tuples = Vec::new();
+    for line in reader.lines() {
+        let line = line.expect("failed to read");
+        let mut chars = line.chars();
+        let c1 = chars.next().expect("Line too short");
+        let c2 = chars.next().expect("line too short");
+        tuples.push((c1, c2));
+    }
+    println!("This is Tuples: {:?}", tuples);
+    for (c1, c2) in tuples {
+        match (c1, c2) {
+            ('A', 'X') => current += (3 + 3),
+            ('A', 'Y') => current += (6 + 2),
+            ('A', 'Z') => current += 1,
+            ('B', 'X') => current += (3),
+            ('B', 'Y') => current += (3 + 2),
+            ('B', 'Z') => current += (6 + 1),
+            ('C', 'X') => current += (6 + 3),
+            ('C', 'Y') => current += (2),
+            ('C', 'Z') => current += (3 + 1),
+            _ => println!("no match found"),
         }
     }
-    total_cals.sort_by_key(|x| -x);
-    let top_3: i32 = total_cals[0] + total_cals[1] + total_cals[2];
-    println!("Answer: {}", top_3)
+    println!("Answer: {}", current)
 }
-
-//so we have to go through and keep track of the top 3
-//so its the same thing but the if is more complex
-//so you can add up all of the sums and put them into a tuple array
-//[(total,index)]
-//then sort the tuple array by total top to bottom
-//Feel like the tuple array will come in handy in the future, good way to organize the data
