@@ -1,7 +1,6 @@
 use std::fs;
 
 use std::collections::HashSet;
-use std::hash::Hash;
 
 //Part 1
 pub fn day3() {
@@ -30,4 +29,36 @@ pub fn day3() {
         }
     }
     println!("Current: {}", current)
+}
+
+pub fn day3p2() {
+    let mut current: i32 = 0;
+    let mut triple = vec![];
+    let contents = fs::read_to_string("d3input.txt").expect("Failed to read file");
+    for line in contents.lines() {
+        triple.push(line);
+        if triple.len() == 3 {
+            let s1 = triple[0];
+            let s2 = triple[1];
+            let s3 = triple[2];
+            let mut checked_chars = HashSet::new();
+            for c in s1.chars() {
+                if !checked_chars.contains(&c) && s2.contains(c) && s3.contains(c) {
+                    if c.is_uppercase() {
+                        let value = c as u8 - b'A' + 27;
+                        println!("Uppercase Value: {}", value);
+                        current += value as i32;
+                        checked_chars.insert(c);
+                    } else {
+                        let val = c as u8 - b'a' + 1;
+                        current += val as i32;
+                        println!("lowercase Value: {}", val);
+                        checked_chars.insert(c);
+                    }
+                }
+            }
+            triple = [].to_vec();
+        }
+    }
+    println!("Answer: {}", current);
 }
