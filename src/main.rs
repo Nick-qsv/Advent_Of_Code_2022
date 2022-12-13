@@ -17,5 +17,6 @@ fn main() {
     // day2p2()
     // day3()
     // day3p2()
-    day4()
+    // day4()
+    day4p2()
 }
