@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::fs;
 use std::str::FromStr;
 
@@ -17,16 +18,16 @@ pub fn day5() {
     // [J] [L] [P] [F] [C] [H] [F] [J] [C]
     // [Z] [Q] [F] [L] [G] [W] [H] [F] [M]
     //  1   2   3   4   5   6   7   8   9
-    let mut one = vec!["G", "J", "Z"];
-    let mut two = vec!["Q", "L", "R", "P", "W", "F", "V", "C"];
-    let mut three = vec!["F", "P", "M", "C", "L", "G", "R"];
-    let mut four = vec!["L", "F", "B", "W", "P", "H", "M"];
-    let mut five = vec!["G", "C", "F", "S", "V", "Q"];
-    let mut six = vec!["W", "H", "J", "Z", "M", "Q", "T", "L"];
-    let mut seven = vec!["H", "F", "S", "B", "V"];
-    let mut eight = vec!["F", "J", "Z", "S"];
-    let mut nine = vec!["M", "C", "D", "P", "F", "H", "B", "T"];
-
+    let mut vecs = HashMap::new();
+    vecs.insert(1, vec!["G", "J", "Z"]);
+    vecs.insert(2, vec!["Q", "L", "R", "P", "W", "F", "V", "C"]);
+    vecs.insert(3, vec!["F", "P", "M", "C", "L", "G", "R"]);
+    vecs.insert(4, vec!["L", "F", "B", "W", "P", "H", "M"]);
+    vecs.insert(5, vec!["G", "C", "F", "S", "V", "Q"]);
+    vecs.insert(6, vec!["W", "H", "J", "Z", "M", "Q", "T", "L"]);
+    vecs.insert(7, vec!["H", "F", "S", "B", "V"]);
+    vecs.insert(8, vec!["F", "J", "Z", "S"]);
+    vecs.insert(9, vec!["M", "C", "D", "P", "F", "H", "B", "T"]);
     for line in contents.lines() {
         //so we have this format:
         //move 1 from 5 to 6
@@ -42,11 +43,25 @@ pub fn day5() {
                 Err(_) => {}
             }
         }
-        println!("numcommandstest:{:?}", num_commands);
-    }
+        println!("num_commands: {:?}", num_commands);
 
-    println!(
-        "Answer: {}{}{}{}{}{}{}{}{}",
-        one[0], two[0], three[0], four[0], five[0], six[0], seven[0], eight[0], nine[0]
-    )
+        //get the mut vec and shift
+        for j in 0..num_commands[0] {
+            let length = vecs.get_mut(&num_commands[1]).unwrap().len();
+            let shifted_element = vecs.get_mut(&num_commands[1]).unwrap()[length - 1];
+            vecs.get_mut(&num_commands[1]).unwrap().remove(length - 1);
+            vecs.get_mut(&num_commands[2])
+                .unwrap()
+                .push(shifted_element);
+            println!("shifted element: {}", shifted_element);
+        }
+    }
+    for v in 1..10 {
+        let length = vecs.get(&v).unwrap().len();
+        println!(
+            "YO THIS IS ANSWER{:?}",
+            vecs.get_mut(&v).unwrap()[length - 1]
+        );
+    }
+    // println!("this is vecs{:?}", vecs);
 }
