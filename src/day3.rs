@@ -1,6 +1,5 @@
-use std::fs;
-
 use std::collections::HashSet;
+use std::fs;
 
 //Part 1
 pub fn day3() {

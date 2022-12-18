@@ -18,7 +18,7 @@ pub fn day5() {
     // [Z] [Q] [F] [L] [G] [W] [H] [F] [M]
     //  1   2   3   4   5   6   7   8   9
     let mut vecs = HashMap::new();
-    vecs.insert(1, vec!["G", "J", "Z"]);
+    vecs.insert(1, vec!["Z", "J", "G"]);
     vecs.insert(2, vec!["Q", "L", "R", "P", "W", "F", "V", "C"]);
     vecs.insert(3, vec!["F", "P", "M", "C", "L", "G", "R"]);
     vecs.insert(4, vec!["L", "F", "B", "W", "P", "H", "M"]);
@@ -75,7 +75,7 @@ pub fn day5p2() {
     let contents = fs::read_to_string("d5input.txt").expect("Failed to read file");
 
     let mut vecs = HashMap::new();
-    vecs.insert(1, vec!["G", "J", "Z"]);
+    vecs.insert(1, vec!["Z", "J", "G"]);
     vecs.insert(2, vec!["Q", "L", "R", "P", "W", "F", "V", "C"]);
     vecs.insert(3, vec!["F", "P", "M", "C", "L", "G", "R"]);
     vecs.insert(4, vec!["L", "F", "B", "W", "P", "H", "M"]);
@@ -84,6 +84,7 @@ pub fn day5p2() {
     vecs.insert(7, vec!["H", "F", "S", "B", "V"]);
     vecs.insert(8, vec!["F", "J", "Z", "S"]);
     vecs.insert(9, vec!["M", "C", "D", "P", "F", "H", "B", "T"]);
+
     for line in contents.lines() {
         //make each line into a vec of &str
         let string_commands: Vec<&str> = line.split(" ").collect();
@@ -96,7 +97,7 @@ pub fn day5p2() {
                 Err(_) => {}
             }
         }
-        println!("num_commands: {:?}", num_commands);
+        // println!("num_commands: {:?}", num_commands);
 
         //identify items
         let num_items = num_commands[0];
@@ -112,14 +113,14 @@ pub fn day5p2() {
             vecs.get_mut(&start_vec).unwrap().remove(length - 1);
             //move the variable into appropriate vec
             vecs.get_mut(&end_vec).unwrap().push(shifted_element);
-            println!("shifted element: {}", shifted_element);
+            // println!("shifted element: {}", shifted_element);
 
-        //if it's more than one we pop
+            //if it's more than one we pop
         } else {
             for j in (1..=num_items).rev() {
                 //vec length
                 let length = vecs.get(&start_vec).unwrap().len();
-                //start at vec - num_items
+                //first index to remove from is equal to vec - num_items
                 let popped_element = vecs.get_mut(&start_vec).unwrap()[length - j as usize];
                 //remove the variable from the vec
                 vecs.get_mut(&start_vec)
@@ -127,11 +128,11 @@ pub fn day5p2() {
                     .remove(length - j as usize);
                 //move the variable into appropriate vec
                 vecs.get_mut(&end_vec).unwrap().push(popped_element);
-                println!("popped element: {}", popped_element);
+                // println!("popped element: {}", popped_element);
             }
         }
     }
-    //print the answer
+    // print the answer
     for v in 1..10 {
         let length = vecs.get(&v).unwrap().len();
         println!(
@@ -139,5 +140,5 @@ pub fn day5p2() {
             vecs.get_mut(&v).unwrap()[length - 1]
         );
     }
-    println!("YO THIS IS ANSWER{:?}", vecs);
+    // println!("YO THIS IS ANSWER{:?}", vecs);
 }

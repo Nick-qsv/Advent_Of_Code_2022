@@ -4,7 +4,6 @@ use std::fs;
 //Part 1
 pub fn day4() {
     let contents = fs::read_to_string("d4input.txt").expect("Failed to read file");
-
     let mut counter: i32 = 0;
     for line in contents.lines() {
         //make each line into a vec of ["2-4","4-6"]
@@ -42,7 +41,6 @@ pub fn day4() {
 //Same thing but use is_disjoint rather than is_subset
 pub fn day4p2() {
     let contents = fs::read_to_string("d4input.txt").expect("Failed to read file");
-
     let mut counter: i32 = 0;
     for line in contents.lines() {
         //make each line into a vec of ["2-4","4-6"]
