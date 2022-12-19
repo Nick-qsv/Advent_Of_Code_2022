@@ -1,3 +1,5 @@
+#![allow(unused_parens)]
+
 use std::fs;
 
 //Part 1
@@ -40,7 +42,7 @@ pub fn day2p2() {
     }
     for (c1, c2) in tuples {
         match (c1, c2) {
-            ("A", " X") => current += (3),
+            ("A", " X") => current += 3,
             ("A", " Y") => current += (1 + 3),
             ("A", " Z") => current += (2 + 6),
             ("B", " X") => current += (1),
