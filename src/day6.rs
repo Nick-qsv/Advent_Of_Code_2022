@@ -61,6 +61,5 @@ pub fn day6p2() {
         }
         set.clear();
     }
-
     println!("Answer: {:?}", answer);
 }
