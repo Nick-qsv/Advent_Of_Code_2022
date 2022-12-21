@@ -1,27 +1,30 @@
 use std::fs;
+use std::rc::Rc;
 
 struct TreeNode<T> {
     value: T,
+    parent: Option<Rc<TreeNode<T>>>,
     children: Vec<Box<TreeNode<T>>>,
     files: Vec<i32>,
-    parent: Option<&mut TreeNode<T>>,
 }
 
 impl<T> TreeNode<T> {
     fn new(value: T) -> TreeNode<T> {
         TreeNode {
             value,
+            parent: None,
             children: Vec::new(),
             files: Vec::new(),
-            parent: None,
         }
     }
 
-    fn add_child(&mut self, mut child: Box<TreeNode<T>>) {
+    fn add_child(&mut self, child: Box<TreeNode<T>>) {
         self.children.push(child);
-        child.parent = Some(self);
     }
 
+    fn set_parent(&mut self, parent: Rc<TreeNode<T>>) {
+        self.parent = Some(parent);
+    }
     fn add_file(&mut self, file: i32) {
         self.files.push(file);
     }
@@ -43,7 +46,9 @@ pub fn day7() {
         if c_line[0] != "$" {
             //if its a directory, add a new treenode with value of directory name
             if c_line[0] == "dir" {
-                c_node.add_child(TreeNode::new(c_line[1]))
+                let mut child = Box::new(TreeNode::new(c_line[1]));
+                c_node.add_child(child);
+                child.set_parent(Rc::new(c_node));
             } else {
                 //else add a file to the directory, parsing the initial value into an i32
                 c_node.add_file(c_line[0].parse::<i32>().unwrap())
