@@ -48,7 +48,7 @@ pub fn day7() {
             if c_line[0] == "dir" {
                 let mut child = Box::new(TreeNode::new(c_line[1]));
                 c_node.add_child(child);
-                child.set_parent(Rc::new(c_node));
+                // child.set_parent(Rc::new(c_node));
             } else {
                 //else add a file to the directory, parsing the initial value into an i32
                 c_node.add_file(c_line[0].parse::<i32>().unwrap())
