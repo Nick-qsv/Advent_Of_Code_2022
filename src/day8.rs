@@ -26,6 +26,22 @@ pub fn day8() {
         hash_map.insert(key, num_vec);
         key += 1;
     }
-    println!("Hashmap:{:?}", hash_map);
+    //get # key value pairs in hashmap
+    let kvp = hash_map.len() as i32;
+    //iterate through each line
+    for j in 1..=kvp {
+        //get length of the vec
+        let vec_len = hash_map.get_mut(&j).unwrap().len();
+        //check if it is the first row or last row
+        if j == 1 || j == kvp {
+            tree_count += vec_len as i32;
+        } else {
+            //loop over each item in the vec
+            for i in 0..vec_len {
+                println!("i: {}", i);
+            }
+        }
+    }
+    // println!("Hashmap:{:?}", hash_map);
     println!("Answer: {}", tree_count);
 }
