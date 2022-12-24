@@ -45,8 +45,12 @@ pub fn day8() {
                     let right_slice = &grid[i][j..row_len];
                     //get the slice of i32 for the left
                     let left_slice = &grid[i][0..j + 1];
-                    println!("left slice: {:?}", left_slice);
+
                     if check_right(&right_slice) || check_left(&left_slice) {
+                        tree_count += 1;
+                    } else if check_above(&grid, j, i) {
+                        tree_count += 1;
+                    } else if check_below(&grid, j, i) {
                         tree_count += 1;
                     }
                 }
@@ -70,14 +74,31 @@ fn check_right(numbers: &[i32]) -> bool {
 }
 //check if all the numbers to the left are less
 fn check_left(numbers: &[i32]) -> bool {
-    let length = numbers.len() - 2;
+    //length is equal to length of the array -1, this gives the index of the number we're checking
+    let length = numbers.len() - 1;
+    //starts at length - 1 because not inclusive
     for i in (0..length).rev() {
-        if numbers[i] >= numbers[length + 1] {
+        if numbers[i] >= numbers[length] {
             return false;
         }
     }
     true
 }
 //check if all the numbers above are less
-
+fn check_above(grid: &Vec<Vec<i32>>, curr_col: usize, curr_row: usize) -> bool {
+    for x in (0..curr_row).rev() {
+        if grid[x][curr_col] >= grid[curr_row][curr_col] {
+            return false;
+        }
+    }
+    true
+}
 //check if all the numbers below are less
+fn check_below(grid: &Vec<Vec<i32>>, curr_col: usize, curr_row: usize) -> bool {
+    for x in curr_row + 1..grid.len() {
+        if grid[x][curr_col] >= grid[curr_row][curr_col] {
+            return false;
+        }
+    }
+    true
+}
