@@ -86,7 +86,7 @@ pub fn day9() {
         let c: Vec<&str> = line.split(" ").collect();
         let dir = c[0];
         let val: i32 = c[1].parse().expect("couldn't parse");
-        for i in 0..=val {
+        for i in 0..val {
             head.shift_head(dir);
             // println!("Head:{:?}", head);
             //now we need to calculate the difference between x & y
@@ -95,38 +95,22 @@ pub fn day9() {
             //write some ifs on what to do
             //if dx and dy both equal 1 then you have a diagonal
             //else if its 2,0 then you move x+1
-            if (dx == 2 && dy == 0) {
-                tail.position.x += 1;
-            }
-            //else if its 0,2 then you move y+1
-            else if (dx == 0 && dy == 2) {
-                tail.position.y += 1;
-            }
-            //else if its -2,0 then you move x-1
-            else if (dx == -2 && dy == 0) {
-                tail.position.x -= 1;
-            }
-            //else if its 0,-2 then you move y-1
-            else if (dx == 0 && dy == -2) {
-                tail.position.y -= 1;
-            } else if (dx == 2 && dy == 1) || (dx == 1 && dy == 2) {
-                tail.position.x += 1;
-                tail.position.y += 1;
-            } else if (dx == -1 && dy == 2) || (dx == -2 && dy == 1) {
-                tail.position.x -= 1;
-                tail.position.y += 1;
-            } else if (dx == -1 && dy == -2) || (dx == -2 && dy == -1) {
-                tail.position.x -= 1;
-                tail.position.y -= 1;
-            } else if (dx == 2 && dy == -1) || (dx == 1 && dy == -2) {
-                tail.position.x += 1;
-                tail.position.y -= 1;
+            // Check if dx is 2 or -2
+            if dx == 2 || dx == -2 {
+                // If dx is 2 or -2, move the x position by dx / 2
+                tail.position.x += dx / 2;
+                tail.position.y += dy;
+            // If dx is not 2 or -2, check if dy is 2 or -2
+            } else if dy == 2 || dy == -2 {
+                // If dy is 2 or -2, move the y position by dy / 2
+                tail.position.y += dy / 2;
+                tail.position.x += dx;
             }
             let new_point = tail.position;
             point_set.insert(new_point);
-            println!("head position:{:?}", head.position);
-            println!("tail position:{:?}", tail.position);
-            println!("-------------------------")
+            // println!("head position:{:?}", head.position);
+            // println!("tail position:{:?}", tail.position);
+            // println!("-------------------------")
         }
     }
     println!("Answer: {:?}", point_set.len())
