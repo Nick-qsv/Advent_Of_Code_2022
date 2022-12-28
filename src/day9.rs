@@ -8,6 +8,7 @@ pub struct Point {
     y: i32,
 }
 
+//implement hash for point so you can add it to the hashset
 impl Hash for Point {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.x.hash(state);
@@ -59,11 +60,6 @@ impl Tail {
             position: Point { x: 0, y: 0 },
         }
     }
-
-    fn shift_tail(&mut self) {
-        //so they need to be in the same row or column
-        //and only be one apart
-    }
 }
 
 //Part 1
@@ -77,18 +73,15 @@ pub fn day9() {
     };
     let mut tail = Tail::new(grid);
     let mut head = Head::new(grid);
-    // println!("Head:{:?}", head);
-    // println!("Tail:{:?}", tail);
-    // println!("Grid:{:?}", grid);
 
     for line in contents.lines() {
         //get a vec of &str
         let c: Vec<&str> = line.split(" ").collect();
         let dir = c[0];
         let val: i32 = c[1].parse().expect("couldn't parse");
-        for i in 0..val {
+        for _ in 0..val {
             head.shift_head(dir);
-            // println!("Head:{:?}", head);
+
             //now we need to calculate the difference between x & y
             let dx = head.position.x - tail.position.x;
             let dy = head.position.y - tail.position.y;
