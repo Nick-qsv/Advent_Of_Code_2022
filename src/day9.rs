@@ -115,6 +115,7 @@ pub fn day9p2() {
         width: 10000,
         height: 10000,
     };
+    // let mut tails = [Tail::new(grid); 9];
     let mut tail_1 = Tail::new(grid);
     let mut head = Head::new(grid);
     let mut tail_2 = Tail::new(grid);
@@ -268,3 +269,29 @@ pub fn day9p2() {
     }
     println!("Answer: {:?}", point_set.len());
 }
+
+//way to clean it up a bit:
+// for line in contents.lines() {
+//     //get a vec of &str
+//     let c: Vec<&str> = line.split(" ").collect();
+//     let dir = c[0];
+//     let val: i32 = c[1].parse().expect("couldn't parse");
+//     for _ in 0..val {
+//         head.shift_head(dir);
+
+//         for i in 0..tails.len() {  // iterate over the array of tail objects
+//             let dx = head.position.x - tails[i].position.x;
+//             let dy = head.position.y - tails[i].position.y;
+//             if dx.abs() == 2 && dy.abs() == 2 {
+//                 tails[i].position.x += dx / 2;
+//                 tails[i].position.y += dy / 2;
+//             } else if dx == 2 || dx == -2 {
+//                 tails[i].position.x += dx / 2;
+//                 tails[i].position.y += dy;
+//             } else if dy == 2 || dy == -2 {
+//                 tails[i].position.y += dy / 2;
+//                 tails[i].position.x += dx;
+//             }
+//         }
+//     }
+// }
