@@ -101,9 +101,6 @@ pub fn day9() {
             //insert the tail position to the hashset
             let new_point = tail.position;
             point_set.insert(new_point);
-            // println!("head position:{:?}", head.position);
-            // println!("tail position:{:?}", tail.position);
-            // println!("-------------------------")
         }
     }
     println!("Answer: {:?}", point_set.len())
@@ -267,72 +264,7 @@ pub fn day9p2() {
             //insert the tail_9 position to the hashset
             let new_point = tail_9.position;
             point_set.insert(new_point);
-            // println!("Pointset!{:?}", point_set);
-            // println!("head position:{:?}", head.position);
-            // println!("tail_1 position:{:?}", tail_1.position);
-            // println!("tail_2 position:{:?}", tail_2.position);
-            // println!("tail_3 position:{:?}", tail_3.position);
-            // println!("tail_4 position:{:?}", tail_4.position);
-            // println!("tail_5 position:{:?}", tail_5.position);
-            // println!("tail_6 position:{:?}", tail_6.position);
-            // println!("tail_7 position:{:?}", tail_7.position);
-            // println!("tail_8 position:{:?}", tail_8.position);
-            // println!("tail_9 position:{:?}", tail_9.position);
-            // println!("-------------------------")
         }
     }
     println!("Answer: {:?}", point_set.len());
-    // println!("Point Set!{:?}", point_set)
-}
-
-pub fn test_openai() {
-    let points = vec![
-        Point { x: -8, y: 1 },
-        Point { x: -6, y: -1 },
-        Point { x: 9, y: 1 },
-        Point { x: 5, y: 5 },
-        Point { x: 7, y: 3 },
-        Point { x: 3, y: -5 },
-        Point { x: 2, y: 2 },
-        Point { x: 1, y: 3 },
-        Point { x: 1, y: 1 },
-        Point { x: -2, y: -5 },
-        Point { x: 0, y: -5 },
-        Point { x: 4, y: 5 },
-        Point { x: 2, y: -5 },
-        Point { x: 10, y: 0 },
-        Point { x: -9, y: 2 },
-        Point { x: -11, y: 4 },
-        Point { x: 5, y: -5 },
-        Point { x: -11, y: 6 },
-        Point { x: -3, y: -4 },
-        Point { x: -5, y: -2 },
-        Point { x: 1, y: -5 },
-        Point { x: -10, y: 3 },
-        Point { x: 6, y: 4 },
-        Point { x: 8, y: 2 },
-        Point { x: -7, y: 0 },
-        Point { x: 4, y: -5 },
-        Point { x: -1, y: -5 },
-        Point { x: 6, y: -4 },
-        Point { x: -4, y: -3 },
-        Point { x: 7, y: -3 },
-        Point { x: 0, y: 0 },
-        Point { x: 3, y: 5 },
-        Point { x: -11, y: 5 },
-        Point { x: 2, y: 4 },
-        Point { x: 9, y: -1 },
-        Point { x: 8, y: -2 },
-    ];
-
-    for y in -11..=6 {
-        for x in -11..=10 {
-            if points.contains(&Point { x, y }) {
-                print!("#");
-            } else {
-                print!(".");
-            }
-        }
-        println!();
-    }
 }
