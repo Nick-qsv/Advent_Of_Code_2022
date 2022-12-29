@@ -157,7 +157,7 @@ pub fn day9p2() {
             //TAIL 2
             let dx_1 = tail_1.position.x - tail_2.position.x;
             let dy_1 = tail_1.position.y - tail_2.position.y;
-            if (dx_1 == 2 && dy_1 == 2) || (dx_1 == -2 && dy_1 == -2) {
+            if dx_1.abs() == 2 && dy_1.abs() == 2 {
                 tail_2.position.x += dx_1 / 2;
                 tail_2.position.y += dy_1 / 2;
             } else if dx_1 == 2 || dx_1 == -2 {
@@ -171,7 +171,7 @@ pub fn day9p2() {
             //TAIL 3
             let dx_2 = tail_2.position.x - tail_3.position.x;
             let dy_2 = tail_2.position.y - tail_3.position.y;
-            if (dx_2 == 2 && dy_2 == 2) || (dx_2 == -2 && dy_2 == -2) {
+            if dx_2.abs() == 2 && dy_2.abs() == 2 {
                 tail_3.position.x += dx_2 / 2;
                 tail_3.position.y += dy_2 / 2;
             } else if dx_2 == 2 || dx_2 == -2 {
@@ -185,7 +185,7 @@ pub fn day9p2() {
             //TAIL 4
             let dx_3 = tail_3.position.x - tail_4.position.x;
             let dy_3 = tail_3.position.y - tail_4.position.y;
-            if (dx_3 == 2 && dy_3 == 2) || (dx_3 == -2 && dy_3 == -2) {
+            if dx_3.abs() == 2 && dy_3.abs() == 2 {
                 tail_4.position.x += dx_3 / 2;
                 tail_4.position.y += dy_3 / 2;
             } else if dx_3 == 2 || dx_3 == -2 {
@@ -199,7 +199,7 @@ pub fn day9p2() {
             //TAIL 5
             let dx_4 = tail_4.position.x - tail_5.position.x;
             let dy_4 = tail_4.position.y - tail_5.position.y;
-            if (dx_4 == 2 && dy_4 == 2) || (dx_4 == -2 && dy_4 == -2) {
+            if dx_4.abs() == 2 && dy_4.abs() == 2 {
                 tail_5.position.x += dx_4 / 2;
                 tail_5.position.y += dy_4 / 2;
             } else if dx_4 == 2 || dx_4 == -2 {
@@ -213,7 +213,7 @@ pub fn day9p2() {
             //TAIL 6
             let dx_5 = tail_5.position.x - tail_6.position.x;
             let dy_5 = tail_5.position.y - tail_6.position.y;
-            if (dx_5 == 2 && dy_5 == 2) || (dx_5 == -2 && dy_5 == -2) {
+            if dx_5.abs() == 2 && dy_5.abs() == 2 {
                 tail_6.position.x += dx_5 / 2;
                 tail_6.position.y += dy_5 / 2;
             } else if dx_5 == 2 || dx_5 == -2 {
@@ -226,7 +226,7 @@ pub fn day9p2() {
             //TAIL 7
             let dx_6 = tail_6.position.x - tail_7.position.x;
             let dy_6 = tail_6.position.y - tail_7.position.y;
-            if (dx_6 == 2 && dy_6 == 2) || (dx_6 == -2 && dy_6 == -2) {
+            if dx_6.abs() == 2 && dy_6.abs() == 2 {
                 tail_7.position.x += dx_6 / 2;
                 tail_7.position.y += dy_6 / 2;
             } else if dx_6 == 2 || dx_6 == -2 {
@@ -240,7 +240,7 @@ pub fn day9p2() {
             //TAIL 8
             let dx_7 = tail_7.position.x - tail_8.position.x;
             let dy_7 = tail_7.position.y - tail_8.position.y;
-            if (dx_7 == 2 && dy_7 == 2) || (dx_7 == -2 && dy_7 == -2) {
+            if dx_7.abs() == 2 && dy_7.abs() == 2 {
                 tail_8.position.x += dx_7 / 2;
                 tail_8.position.y += dy_7 / 2;
             } else if dx_7 == 2 || dx_7 == -2 {
@@ -254,7 +254,7 @@ pub fn day9p2() {
             //TAIL 9
             let dx_8 = tail_8.position.x - tail_9.position.x;
             let dy_8 = tail_8.position.y - tail_9.position.y;
-            if (dx_8 == 2 && dy_8 == 2) || (dx_8 == -2 && dy_8 == -2) {
+            if dx_8.abs() == 2 && dy_8.abs() == 2 {
                 tail_9.position.x += dx_8 / 2;
                 tail_9.position.y += dy_8 / 2;
             } else if dx_8 == 2 || dx_8 == -2 {
