@@ -270,6 +270,57 @@ pub fn day9p2() {
     println!("Answer: {:?}", point_set.len());
 }
 
+pub fn test_openai() {
+    let points = vec![
+        Point { x: -8, y: 1 },
+        Point { x: -6, y: -1 },
+        Point { x: 9, y: 1 },
+        Point { x: 5, y: 5 },
+        Point { x: 7, y: 3 },
+        Point { x: 3, y: -5 },
+        Point { x: 2, y: 2 },
+        Point { x: 1, y: 3 },
+        Point { x: 1, y: 1 },
+        Point { x: -2, y: -5 },
+        Point { x: 0, y: -5 },
+        Point { x: 4, y: 5 },
+        Point { x: 2, y: -5 },
+        Point { x: 10, y: 0 },
+        Point { x: -9, y: 2 },
+        Point { x: -11, y: 4 },
+        Point { x: 5, y: -5 },
+        Point { x: -11, y: 6 },
+        Point { x: -3, y: -4 },
+        Point { x: -5, y: -2 },
+        Point { x: 1, y: -5 },
+        Point { x: -10, y: 3 },
+        Point { x: 6, y: 4 },
+        Point { x: 8, y: 2 },
+        Point { x: -7, y: 0 },
+        Point { x: 4, y: -5 },
+        Point { x: -1, y: -5 },
+        Point { x: 6, y: -4 },
+        Point { x: -4, y: -3 },
+        Point { x: 7, y: -3 },
+        Point { x: 0, y: 0 },
+        Point { x: 3, y: 5 },
+        Point { x: -11, y: 5 },
+        Point { x: 2, y: 4 },
+        Point { x: 9, y: -1 },
+        Point { x: 8, y: -2 },
+    ];
+
+    for y in -11..=6 {
+        for x in -11..=10 {
+            if points.contains(&Point { x, y }) {
+                print!("#");
+            } else {
+                print!(".");
+            }
+        }
+        println!();
+    }
+}
 //way to clean it up a bit:
 // for line in contents.lines() {
 //     //get a vec of &str

@@ -47,5 +47,7 @@ fn main() {
     // day8p2()
     // day9()
     // day9p2()
-    day10()
+    // day10()
+    // test_openai()
+    day10p2()
 }
