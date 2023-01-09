@@ -2,7 +2,6 @@
 use std::collections::HashMap;
 use std::fmt::{self, Formatter};
 use std::fs;
-use std::iter::Iterator;
 use std::process::id;
 
 struct Monkey {
@@ -52,6 +51,9 @@ pub fn day11() {
     //make a hashmap of the starting items to manipulate later
     let mut item_map: HashMap<i32, Vec<i32>> = HashMap::new();
 
+    //make a hashmap of the total inspections
+    let mut inspection_map: HashMap<i32, i32> = HashMap::new();
+
     //create the vec of monkeys
     for line in contents.lines() {
         //collect each word in each line into a string
@@ -74,7 +76,7 @@ pub fn day11() {
             let throw = &fin_v_words[1];
             if identity == "Monkey" {
                 let identifier: i32 = fin_v_words[1].parse().expect("couldnt unwrap iden");
-                //create new monkey
+                //create new monkey and add it to the monkey_vec
                 let monkey = Monkey::new(
                     identifier,
                     Box::new(|x| x),
@@ -83,6 +85,9 @@ pub fn day11() {
                     None,
                 );
                 monkey_vec.push(monkey);
+
+                //initialize the inspection hashmap
+                inspection_map.insert(identifier, 0);
             } else if identity == "Starting" {
                 //define the vec thats gonna be pushed into the map
                 let mut start_vec: Vec<i32> = vec![];
@@ -165,28 +170,21 @@ pub fn day11() {
             }
         }
     }
-    //now we have the monkeys set up (I THINK)
-    //so need to do the rounds
-    //When a monkey throws an item to another monkey, the item goes on the end of the recipient monkey's list. A monkey that starts a round with no items could end up inspecting and throwing many items by the time its turn comes around. If a monkey is holding no items at the start of its turn, its turn ends.
 
-    //to avoid copying the monkey_vec, need to make a new data structure that will have the output
-    //maybe instead of having starting items inside the monkey Struct can have it in a standalone hashmap?
-    //so start by looping over each monkey in the vec
-    //monkey 0 with a hashmap of 1
-    //loop through the starting items, youre inside a monkey within monkey_vec and the starting items hashmap
-    //get the data item and manipulate it using the monkey operation
-    //get the data item and manipulate
+    //20 rounds
     for _ in 0..20 {
         //loop through each monkey
         //cant use implicit into iter so need to use 0..x
         let m_v_len = monkey_vec.len();
         for m in 0..m_v_len {
-            //check if starting items is empty
             //define the current monkey
             let monkey = &monkey_vec[m];
             //get the id
             let id = monkey.identifier;
+
             let vec_len = item_map.get(&id).expect("Error unwrapping itemvec").len();
+
+            //check if starting items is empty
             if vec_len > 0 {
                 //loop through the starting items
                 //have to use a for 0..x loop so you don't borrow item_map twice
@@ -206,7 +204,12 @@ pub fn day11() {
                         let i_item = new_item as i32;
                         item_map.get_mut(&t_monkey_id).unwrap().push(i_item);
                         item_map.get_mut(&id).expect("errrrrorrmap").remove(0);
-                    //if the test is false
+
+                        //add 1 to the inspection counter
+                        if let Some(x) = inspection_map.get_mut(&id) {
+                            *x += 1;
+                        }
+                        //if the test is false
                     } else {
                         //get identifier
                         let t_monkey_id = monkey.f_t.expect("f_t error");
@@ -214,6 +217,11 @@ pub fn day11() {
                         let i_item = new_item as i32;
                         item_map.get_mut(&t_monkey_id).unwrap().push(i_item);
                         item_map.get_mut(&id).expect("errrrrorrmap").remove(0);
+
+                        //add 1 to the inspection counter
+                        if let Some(x) = inspection_map.get_mut(&id) {
+                            *x += 1;
+                        }
                     }
                 }
             }
@@ -221,4 +229,5 @@ pub fn day11() {
     }
     // println!("monkey vec: {:?}", monkey_vec);
     print!("One Round: {:?}", item_map);
+    print!("Answer: {:?}", inspection_map);
 }
