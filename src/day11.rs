@@ -1,13 +1,14 @@
 // use debug_fn::DebugFn;
 use std::fmt::{self, Formatter};
 use std::fs;
+use std::iter::Iterator;
 use std::process::id;
 
 struct Monkey {
     identifier: i32,
     starting_items: Vec<i32>,
     operation: Box<dyn Fn(i32) -> i32>,
-    test: Box<dyn Fn(i32) -> bool>,
+    test: Box<dyn Fn(f64) -> bool>,
     t_t: Option<i32>,
     f_t: Option<i32>,
 }
@@ -17,7 +18,7 @@ impl Monkey {
         identifier: i32,
         starting_items: Vec<i32>,
         operation: Box<dyn Fn(i32) -> i32>,
-        test: Box<dyn Fn(i32) -> bool>,
+        test: Box<dyn Fn(f64) -> bool>,
         t_t: Option<i32>,
         f_t: Option<i32>,
     ) -> Self {
@@ -65,7 +66,6 @@ pub fn day11() {
             .map(|x| x.replace(":", "").replace(",", ""))
             .collect();
         // println!("vec_words: {:?}", fin_v_words);
-        let m_len = monkey_vec.len();
         //make sure vec_words isn't empty
         if fin_v_words.len() > 0 {
             //get statement identifier
@@ -79,7 +79,7 @@ pub fn day11() {
                     identifier,
                     vec![],
                     Box::new(|x| x),
-                    Box::new(|x| x > 0),
+                    Box::new(|x| x > 0.0),
                     None,
                     None,
                 );
@@ -143,8 +143,8 @@ pub fn day11() {
             } else if identity == "Test" {
                 let last_idx = monkey_vec.len() - 1;
                 let curr_monkey = &mut monkey_vec[last_idx];
-                if let Ok(num) = fin_v_words[3].parse::<i32>() {
-                    curr_monkey.test = Box::new(move |x| x % num == 0);
+                if let Ok(num) = fin_v_words[3].parse::<f64>() {
+                    curr_monkey.test = Box::new(move |x| x % num == 0.0);
                 }
             } else if throw == "true" {
                 let last_idx = monkey_vec.len() - 1;
@@ -161,5 +161,41 @@ pub fn day11() {
             }
         }
     }
-    println!("monkey vec: {:?}", monkey_vec);
+    //now we have the monkeys set up (I THINK)
+    //so need to do the rounds
+    //When a monkey throws an item to another monkey, the item goes on the end of the recipient monkey's list. A monkey that starts a round with no items could end up inspecting and throwing many items by the time its turn comes around. If a monkey is holding no items at the start of its turn, its turn ends.
+
+    //to avoid copying the monkey_vec, need to make a new data structure that will have the output
+    //maybe instead of having starting items inside the monkey Struct can have it in a standalone hashmap?
+    //so start by looping over each monkey in the vec
+    //monkey 0 with a hashmap of 1
+    //loop through the starting items, youre inside a monkey within monkey_vec and the starting items hashmap
+    //get the data item and manipulate it using the monkey operation
+    //get the data item and manipulate
+    //loop through each monkey
+    for mut monkey in monkey_vec {
+        //check if starting items is empty
+        if monkey.starting_items.len() > 0 {
+            //loop through the starting items
+            for mut item in monkey.starting_items {
+                item = (monkey.operation)(item);
+                let mut new_item = 0.0;
+                new_item = item as f64 / 3.0;
+                new_item = new_item.floor();
+                if (monkey.test)(new_item) {
+                    //so if the test is true
+                    //need to convert new_item to i32
+                    //then either find or loop through all the monkeys
+                    //get identifier
+                    let monkey_id = monkey.t_t.expect("t_t error");
+                    // monkey_vec[monkey_id as usize]
+                    //     .starting_items
+                    //     .push(new_item as i32);
+                } else {
+                    let monkey_id = monkey.f_t.expect("f_t error");
+                }
+            }
+        }
+    }
+    // println!("monkey vec: {:?}", monkey_vec);
 }
