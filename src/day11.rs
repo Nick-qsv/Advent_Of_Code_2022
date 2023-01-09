@@ -1,4 +1,5 @@
 // use debug_fn::DebugFn;
+use std::collections::HashMap;
 use std::fmt::{self, Formatter};
 use std::fs;
 use std::iter::Iterator;
@@ -6,7 +7,6 @@ use std::process::id;
 
 struct Monkey {
     identifier: i32,
-    starting_items: Vec<i32>,
     operation: Box<dyn Fn(i32) -> i32>,
     test: Box<dyn Fn(f64) -> bool>,
     t_t: Option<i32>,
@@ -16,7 +16,6 @@ struct Monkey {
 impl Monkey {
     fn new(
         identifier: i32,
-        starting_items: Vec<i32>,
         operation: Box<dyn Fn(i32) -> i32>,
         test: Box<dyn Fn(f64) -> bool>,
         t_t: Option<i32>,
@@ -24,7 +23,6 @@ impl Monkey {
     ) -> Self {
         Self {
             identifier,
-            starting_items,
             operation,
             test,
             t_t,
@@ -37,9 +35,8 @@ impl fmt::Debug for Monkey {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "Monkey {{ identifier: {}, starting_items: {:?}, operation: <closure>, test: <closure>, t_t: {:?}, f_t: {:?} }}",
+            "Monkey {{ identifier: {}, operation: <closure>, test: <closure>, t_t: {:?}, f_t: {:?} }}",
             self.identifier,
-            self.starting_items,
             self.t_t,
             self.f_t
         )
@@ -51,6 +48,9 @@ pub fn day11() {
 
     //make a vec of monkeys to iterate through later
     let mut monkey_vec: Vec<Monkey> = vec![];
+
+    //make a hashmap of the starting items to manipulate later
+    let mut item_map: HashMap<i32, Vec<i32>> = HashMap::new();
 
     //create the vec of monkeys
     for line in contents.lines() {
@@ -77,7 +77,6 @@ pub fn day11() {
                 //create new monkey
                 let monkey = Monkey::new(
                     identifier,
-                    vec![],
                     Box::new(|x| x),
                     Box::new(|x| x > 0.0),
                     None,
@@ -85,15 +84,20 @@ pub fn day11() {
                 );
                 monkey_vec.push(monkey);
             } else if identity == "Starting" {
-                //get the last index of the monkey array (current monkey)
-                let last_idx = monkey_vec.len() - 1;
-                let curr_monkey = &mut monkey_vec[last_idx];
+                //define the vec thats gonna be pushed into the map
+                let mut start_vec: Vec<i32> = vec![];
                 //iterate over each word and see if it is an i32
                 for word in fin_v_words {
                     if let Ok(num) = word.parse::<i32>() {
-                        curr_monkey.starting_items.push(num);
+                        start_vec.push(num);
                     }
                 }
+                //find the identifier
+                let last_idx = monkey_vec.len() - 1;
+                let curr_monkey = &mut monkey_vec[last_idx];
+                let id = curr_monkey.identifier;
+                //insert the start_vec into the hash_map
+                item_map.insert(id, start_vec);
             } else if identity == "Operation" {
                 let last_idx = monkey_vec.len() - 1;
                 let curr_monkey = &mut monkey_vec[last_idx];
@@ -172,30 +176,49 @@ pub fn day11() {
     //loop through the starting items, youre inside a monkey within monkey_vec and the starting items hashmap
     //get the data item and manipulate it using the monkey operation
     //get the data item and manipulate
-    //loop through each monkey
-    for mut monkey in monkey_vec {
-        //check if starting items is empty
-        if monkey.starting_items.len() > 0 {
-            //loop through the starting items
-            for mut item in monkey.starting_items {
-                item = (monkey.operation)(item);
-                let mut new_item = 0.0;
-                new_item = item as f64 / 3.0;
-                new_item = new_item.floor();
-                if (monkey.test)(new_item) {
-                    //so if the test is true
-                    //need to convert new_item to i32
-                    //then either find or loop through all the monkeys
-                    //get identifier
-                    let monkey_id = monkey.t_t.expect("t_t error");
-                    // monkey_vec[monkey_id as usize]
-                    //     .starting_items
-                    //     .push(new_item as i32);
-                } else {
-                    let monkey_id = monkey.f_t.expect("f_t error");
+    for _ in 0..20 {
+        //loop through each monkey
+        //cant use implicit into iter so need to use 0..x
+        let m_v_len = monkey_vec.len();
+        for m in 0..m_v_len {
+            //check if starting items is empty
+            //define the current monkey
+            let monkey = &monkey_vec[m];
+            //get the id
+            let id = monkey.identifier;
+            let vec_len = item_map.get(&id).expect("Error unwrapping itemvec").len();
+            if vec_len > 0 {
+                //loop through the starting items
+                //have to use a for 0..x loop so you don't borrow item_map twice
+                for _ in 0..vec_len {
+                    let mut item = item_map.get(&id).unwrap()[0];
+                    //run the current monkey operation on the i32
+                    item = (monkey.operation)(item);
+
+                    //make a new f64 value to representing the current worry level
+                    let mut new_item = item as f64 / 3.0;
+                    new_item = new_item.floor();
+                    //if the test is true
+                    if (monkey.test)(new_item) {
+                        //get identifier
+                        let t_monkey_id = monkey.t_t.expect("t_t error");
+                        //convert new_item to an i32
+                        let i_item = new_item as i32;
+                        item_map.get_mut(&t_monkey_id).unwrap().push(i_item);
+                        item_map.get_mut(&id).expect("errrrrorrmap").remove(0);
+                    //if the test is false
+                    } else {
+                        //get identifier
+                        let t_monkey_id = monkey.f_t.expect("f_t error");
+                        //convert new_item to an i32
+                        let i_item = new_item as i32;
+                        item_map.get_mut(&t_monkey_id).unwrap().push(i_item);
+                        item_map.get_mut(&id).expect("errrrrorrmap").remove(0);
+                    }
                 }
             }
         }
     }
     // println!("monkey vec: {:?}", monkey_vec);
+    print!("One Round: {:?}", item_map);
 }

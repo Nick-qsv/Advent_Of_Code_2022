@@ -46,7 +46,7 @@ pub fn day5() {
         println!("num_commands: {:?}", num_commands);
 
         //get the mut vec and shift
-        for j in 0..num_commands[0] {
+        for _ in 0..num_commands[0] {
             //length of the vec
             let length = vecs.get_mut(&num_commands[1]).unwrap().len();
             //set last element in vec to this variable

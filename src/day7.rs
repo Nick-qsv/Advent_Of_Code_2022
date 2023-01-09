@@ -34,7 +34,7 @@ pub fn day7() {
     let contents = fs::read_to_string("d7input.txt").expect("Failed to read file");
     let mut root = TreeNode::new("/");
     //define the current node, which can be modified
-    let mut c_node = &mut root;
+    let c_node = &mut root;
     for line in contents.lines() {
         //ls line starts a loop creating and adding children to the current node
         //cd line either goes back up a node or goes into one of the newly created node
