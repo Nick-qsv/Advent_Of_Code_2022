@@ -66,7 +66,7 @@ pub fn day10p2() {
         if arr.len() == 2 {
             x_val = arr[1].parse().expect("");
         }
-
+        //creating the register array
         if command == "noop" {
             register_arr.push(register_val);
         } else {
@@ -84,11 +84,13 @@ pub fn day10p2() {
     let mut clock_cycle = 0;
     for _ in 1..7 {
         for x in 0..40 {
+            //define hashset and current register
             let mut curr_set = HashSet::new();
             let curr_register = register_arr[clock_cycle];
             curr_set.insert(curr_register + 1);
             curr_set.insert(curr_register - 1);
             curr_set.insert(curr_register);
+            //if set contains x (horizontal position) then print #
             if curr_set.contains(&x) {
                 print!("#")
             } else {
@@ -98,9 +100,9 @@ pub fn day10p2() {
         }
         println!();
     }
-    // println!("register arr = {:?}", register_arr);
-    // println!("clock arr = {:?}", clock_cycle_arr,);
 }
+
+//Pseudocode
 
 //need a new idea of looking at this
 //addx 15 these are the steps:
