@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 # debug_fn = "0.3"
+num-bigint = "0.4"

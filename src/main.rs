@@ -32,6 +32,10 @@ use day10::*;
 
 mod day11;
 use day11::*;
+
+mod day11p2;
+use day11p2::*;
+
 fn main() {
     // day1()
     // day1p2()
@@ -53,5 +57,6 @@ fn main() {
     // day10()
     // test_openai()
     // day10p2()
-    day11()
+    // day11()
+    day11p2()
 }

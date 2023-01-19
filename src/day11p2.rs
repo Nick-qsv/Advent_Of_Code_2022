@@ -4,8 +4,8 @@ use std::fs;
 use std::process::id;
 struct Monkey {
     identifier: i32,
-    operation: Box<dyn Fn(i32) -> i32>,
-    test: Box<dyn Fn(f64) -> bool>,
+    operation: Box<dyn Fn(u128) -> u128>,
+    test: Box<dyn Fn(u128) -> bool>,
     t_t: Option<i32>,
     f_t: Option<i32>,
 }
@@ -13,8 +13,8 @@ struct Monkey {
 impl Monkey {
     fn new(
         identifier: i32,
-        operation: Box<dyn Fn(i32) -> i32>,
-        test: Box<dyn Fn(f64) -> bool>,
+        operation: Box<dyn Fn(u128) -> u128>,
+        test: Box<dyn Fn(u128) -> bool>,
         t_t: Option<i32>,
         f_t: Option<i32>,
     ) -> Self {
@@ -40,17 +40,20 @@ impl fmt::Debug for Monkey {
     }
 }
 //Part 1
-pub fn day11() {
+pub fn day11p2() {
     let contents = fs::read_to_string("d11input.txt").expect("Failed to read file");
 
     //make a vec of monkeys to iterate through later
     let mut monkey_vec: Vec<Monkey> = vec![];
 
     //make a hashmap of the starting items to manipulate later
-    let mut item_map: HashMap<i32, Vec<i32>> = HashMap::new();
+    let mut item_map: HashMap<i32, Vec<u128>> = HashMap::new();
 
     //make a hashmap of the total inspections
-    let mut inspection_map: HashMap<i32, i32> = HashMap::new();
+    let mut inspection_map: HashMap<i32, u128> = HashMap::new();
+
+    //calculate the modulo to handle the worry levels
+    let mut modulo: u128 = 1;
 
     //create the vec of monkeys
     for line in contents.lines() {
@@ -81,24 +84,19 @@ pub fn day11() {
             if identity == "Monkey" {
                 let identifier: i32 = fin_v_words[1].parse().expect("couldnt unwrap iden");
                 //create new monkey and add it to the monkey_vec
-                let monkey = Monkey::new(
-                    identifier,
-                    Box::new(|x| x),
-                    Box::new(|x| x > 0.0),
-                    None,
-                    None,
-                );
+                let monkey =
+                    Monkey::new(identifier, Box::new(|x| x), Box::new(|x| x > 0), None, None);
                 monkey_vec.push(monkey);
 
                 //initialize the inspection hashmap
                 inspection_map.insert(identifier, 0);
             } else if identity == "Starting" {
                 //define the vec thats gonna be pushed into the HashMap
-                let mut start_vec: Vec<i32> = vec![];
+                let mut start_vec: Vec<u128> = vec![];
 
                 //iterate over each word and see if it is an i32
                 for word in fin_v_words {
-                    if let Ok(num) = word.parse::<i32>() {
+                    if let Ok(num) = word.parse::<u128>() {
                         start_vec.push(num);
                     }
                 }
@@ -124,7 +122,7 @@ pub fn day11() {
                 match operand {
                     "*" => {
                         //if it is not == to old
-                        if let Ok(num) = var.parse::<i32>() {
+                        if let Ok(num) = var.parse::<u128>() {
                             //define the operation as multiplication with num as the number
                             curr_monkey.operation = Box::new(move |x| x * num);
                         } else {
@@ -134,21 +132,21 @@ pub fn day11() {
                     }
                     //same logic for the remaining operands
                     "+" => {
-                        if let Ok(num) = var.parse::<i32>() {
+                        if let Ok(num) = var.parse::<u128>() {
                             curr_monkey.operation = Box::new(move |x| x + num);
                         } else {
                             curr_monkey.operation = Box::new(|x| x + x);
                         }
                     }
                     "-" => {
-                        if let Ok(num) = var.parse::<i32>() {
+                        if let Ok(num) = var.parse::<u128>() {
                             curr_monkey.operation = Box::new(move |x| x - num);
                         } else {
                             curr_monkey.operation = Box::new(|x| x - x);
                         }
                     }
                     "/" => {
-                        if let Ok(num) = var.parse::<i32>() {
+                        if let Ok(num) = var.parse::<u128>() {
                             curr_monkey.operation = Box::new(move |x| x / num);
                         } else {
                             curr_monkey.operation = Box::new(|x| x / x);
@@ -162,8 +160,9 @@ pub fn day11() {
                 let curr_monkey = &mut monkey_vec[last_idx];
 
                 //define the boolean test function checking if remainder is 0
-                if let Ok(num) = fin_v_words[3].parse::<f64>() {
-                    curr_monkey.test = Box::new(move |x| x % num == 0.0);
+                if let Ok(num) = fin_v_words[3].parse::<u128>() {
+                    curr_monkey.test = Box::new(move |x| x % num == 0);
+                    modulo *= num;
                 }
             } else if throw == "true" {
                 let last_idx = monkey_vec.len() - 1;
@@ -210,19 +209,16 @@ pub fn day11() {
 
                     //run the current monkey operation on the i32
                     item = (monkey.operation)(item);
-
-                    //make a new f64 value to representing the current worry level
-                    let mut new_item = item as f64 / 3.0;
-                    new_item = new_item.floor();
+                    item = item % modulo;
 
                     //if the test is true
-                    if (monkey.test)(new_item) {
+                    if (monkey.test)(item) {
                         //get identifier
                         let t_monkey_id = monkey.t_t.expect("t_t error");
 
-                        //convert new_item to an i32
-                        let i_item = new_item as i32;
-                        item_map.get_mut(&t_monkey_id).unwrap().push(i_item);
+                        // //convert new_item to an i32
+                        // let i_item = item as i32;
+                        item_map.get_mut(&t_monkey_id).unwrap().push(item);
                         item_map.get_mut(&id).expect("errrrrorrmap").remove(0);
 
                         //add 1 to the inspection counter
@@ -235,8 +231,8 @@ pub fn day11() {
                         let t_monkey_id = monkey.f_t.expect("f_t error");
 
                         //convert new_item to an i32
-                        let i_item = new_item as i32;
-                        item_map.get_mut(&t_monkey_id).unwrap().push(i_item);
+                        // let i_item = new_item as i32;
+                        item_map.get_mut(&t_monkey_id).unwrap().push(item);
                         item_map.get_mut(&id).expect("errrrrorrmap").remove(0);
 
                         //add 1 to the inspection counter
@@ -249,6 +245,8 @@ pub fn day11() {
         }
     }
     // println!("monkey vec: {:?}", monkey_vec);
-    print!("Twenty Rounds: {:?}", item_map);
+    // print!("10k Rounds: {:?}", item_map);
     print!("inspection map: {:?}", inspection_map);
+    let x: u128 = 120377 * 148916;
+    print!(" answer: {}", x);
 }
