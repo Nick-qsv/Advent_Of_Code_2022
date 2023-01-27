@@ -7,4 +7,6 @@ edition = "2021"
 
 [dependencies]
 # debug_fn = "0.3"
-num-bigint = "0.4"
+# num-bigint = "0.4"
+petgraph = "0.6.2"
+petgraph-evcxr = "*"
