@@ -1,12 +1,18 @@
-use petgraph::Graph;
+use petgraph::{graph::Node, Graph};
 use std::fs;
+
+enum NodeType {
+    Normal,
+    Start,
+    Goal,
+}
 
 //Part 1
 pub fn day12() {
     let contents = fs::read_to_string("d12input.txt").expect("Failed to read file");
 
     //initialize the graph
-    let mut g: Graph<&str, &str> = Graph::new();
+    let mut g: Graph<NodeType, ()> = Graph::new();
 
     //initialize the grid
     let mut grid: Vec<Vec<char>> = vec![];
@@ -31,15 +37,29 @@ pub fn day12() {
     let mut c = 0;
 
     //iterate through the whole grid
-    for r in 0..grid.len() {
-        for c in 0..grid[r].len() {
-            //check if it is "S" or "E"
+    // for(row_idx,row) in grid.iter().enumerate(){
+    //     let mut row_iterator = row.iter().peekable();
+    //     while let Some(c1) = row_iterator.next(){
+    //         if let Some(row_below) = grid.get(row_idx+1){
+    //             if let Some(c2) = row_below.get(row_iterator.index()){
 
-            //if not then add the node + number?
+    //             }
+    //         }
+    //     }
+    // }
 
-            //do two loops need to be done?
-            //checking if each is has an edge? adding the edges?
-            //
+    for row_idx in 0..grid.len() {
+        for col_idx in 0..grid[row_idx].len() {
+            let c1 = grid[row_idx][col_idx];
+            if let Some(c2) = grid.get(row_idx).and_then(|row| row.get(col_idx + 1)) {
+                if c1 == (*c2 as u8 + 1) as char || c1 == (*c2 as u8 - 1) as char {}
+            }
         }
     }
 }
+
+// Sabqponm
+// abcryxxl
+// accszExk
+// acctuvwj
+// abdefghi
